@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"strings"
 
 	"github.com/google/gopacket/reassembly"
 	"github.com/pingcap/errors"
@@ -200,6 +201,7 @@ func (fsm *MySQLFSM) set(to int, msg ...string) {
 	if n := len(query); n > 500 {
 		query = query[:300] + "..." + query[n-196:]
 	}
+	query = strings.TrimLeft(query, "\x00\x01")
 	switch to {
 	case StateComQuery:
 		tmpl += fmt.Sprintf("{query:%q}", query)
