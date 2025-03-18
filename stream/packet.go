@@ -152,6 +152,7 @@ func (rh *replayHandler) OnPacket(pkt MySQLPacket) {
 	case StateComQuery:
 		stats.Add(stats.Queries, 1)
 		query := rh.fsm.Query()
+		query = strings.TrimLeft(query, "\x00\x01")
 		if rh.filter != nil && !rh.filter(query) {
 			return
 		}
